@@ -1,30 +1,34 @@
 package db;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import constants.CommonConstants;
+
+import java.sql.*;
+
+// JDBC - Java Database Connectivity
+// this class will be our gateway in accessing our MySQL database
 public class MyJDBC {
+    // register new user to the database
+    // true - register success
+    // false - register failure
     public static boolean register(String username, String password){
         try{
-             
+            // first check if the username already exists in the database
             if(!checkUser(username)){
-                 
+                // connect to the database
                 Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
                         CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
 
-                
+                // create insert query
                 PreparedStatement insertUser = connection.prepareStatement(
-                        "INSERT INTO " + CommonConstants.DB_USERS_TABLE_NAME + "( username , password )" +
-                                "VALUES(?,?)"
+                        "INSERT INTO " + CommonConstants.DB_USERS_TABLE_NAME + "(username, password)" +
+                                "VALUES(?, ?)"
                 );
 
-                
+                // insert parameters in the insert query
                 insertUser.setString(1, username);
                 insertUser.setString(2, password);
 
-              
+                // update db with new user
                 insertUser.executeUpdate();
                 return true;
             }
@@ -34,6 +38,9 @@ public class MyJDBC {
         return false;
     }
 
+    // check if username already exists in the database
+    // false - user doesn't exists
+    // true - user exists in the database
     public static boolean checkUser(String username){
         try{
             Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
@@ -47,7 +54,9 @@ public class MyJDBC {
 
             ResultSet resultSet = checkUserExists.executeQuery();
 
-           
+            // check to see if the result set is empty
+            // if it is empty it means that there was no data row that contains the username
+            // (i.e user does not exist)
             if(!resultSet.isBeforeFirst()){
                 return false;
             }
@@ -59,12 +68,13 @@ public class MyJDBC {
         return true;
     }
 
-    
+    // validate login credentials by checking to see if username/password pair exists in the database
     public static boolean validateLogin(String username, String password){
         try{
             Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
                     CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
 
+            // create select query
             PreparedStatement validateUser = connection.prepareStatement(
                     "SELECT * FROM " + CommonConstants.DB_USERS_TABLE_NAME +
                             " WHERE USERNAME = ? AND PASSWORD = ?"

@@ -14,10 +14,8 @@ import javax.swing.JPanel;
 public class Canvas extends JPanel {
     private final static int STROKE_SIZE = 8;
 
-   
     private List<List<ColorPoint>> allPaths;
 
-  
     private List<ColorPoint> currentPath;
 
     

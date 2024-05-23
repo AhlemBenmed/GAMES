@@ -90,11 +90,12 @@ public class RegisterFormGUI extends Form{
 
                 if(validateUserInput(username, password, rePassword)){
                     if(MyJDBC.register(username,password)){
-                        dispose();
+                        RegisterFormGUI.this.dispose();
 
-                        new LoginFormGUI().setVisible(true);
+                        LoginFormGUI loginFormGUI = new LoginFormGUI();
+                        loginFormGUI.setVisible(true);
 
-                        JOptionPane.showMessageDialog(RegisterFormGUI.this,
+                        JOptionPane.showMessageDialog(loginFormGUI,
                                 "Registered Account Successfully!");
                     }else{
                         JOptionPane.showMessageDialog(RegisterFormGUI.this,

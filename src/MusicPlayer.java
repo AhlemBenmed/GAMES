@@ -208,8 +208,7 @@ public class MusicPlayer extends PlaybackListener {
             @Override
             public void run() {
                 if(isPaused){
-                    try{
-                         
+                    try{  
                         synchronized(playSignal){
                             playSignal.wait();
                         }
